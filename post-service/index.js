@@ -1,8 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
-// impbodyParser from 'body-parser';
-const Post = require('models/Post');
-const Comment = require('models/Comment');
+const Post = require('./models/Post');
+const Comment = require('./models/Comment');
 
 const PORT = process.env.PORT || 3002;
 
