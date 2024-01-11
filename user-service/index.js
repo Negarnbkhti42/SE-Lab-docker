@@ -1,4 +1,5 @@
 const express = require('express');
+const mongoose = require('mongoose');
 const User = require('./models/User');
 // import bodyParser from 'body-parser';
 
@@ -24,7 +25,7 @@ app.get('/', (req, res) => {
     res.send('this is the user serivce');
 });
 
-app.put('/signup', async (req, res) => {
+app.post('/signup', async (req, res) => {
     const { username, password } = req.body;
     const newUser = new User({ username, password });
     newUser.save()
