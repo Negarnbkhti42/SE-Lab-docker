@@ -12,6 +12,6 @@ ENV PORT=8082
 
 EXPOSE 8082
 
-CMD ["npm", "start"]
+CMD ["node", "index.js"]
 
 

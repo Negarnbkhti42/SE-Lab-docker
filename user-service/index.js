@@ -1,5 +1,6 @@
-import express from 'express';
-import bodyParser from 'body-parser';
+const express = require('express');
+const User = require('./models/User');
+// import bodyParser from 'body-parser';
 
 const PORT = process.env.PORT || 3001;
 
@@ -9,12 +10,40 @@ const dbPort = process.env.DB_PORT;
 
 const app = express();
 
-await mongoose.connect(`mongodb://${dbUsername}:${dbPassword}@mongo:${dbPort}`);
+// await mongoose.connect(`mongodb://${dbUsername}:${dbPassword}@mongo:${dbPort}`);
 
-app.get('/', (req, res) => {
-    res.send('Hello World!');
-});
+mongoose.connect(`mongodb://${dbUsername}:${dbPassword}@mongo:${dbPort}`, { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => console.log('MongoDB connected'))
+    .catch((err) => console.log(err));
 
 app.listen(PORT, () => {
     console.log(`Server listening on port ${PORT}`);
 });
+
+app.get('/', (req, res) => {
+    res.send('this is the user serivce');
+});
+
+app.put('/signup', async (req, res) => {
+    const { username, password } = req.body;
+    const newUser = new User({ username, password });
+    newUser.save()
+        .then(() => {
+            res.send(newUser.toObject());
+        }).catch(() => {
+            res.status(400);
+            res.send("failed to create user");
+        })
+})
+
+app.get('/login', async (req, res) => {
+    const { username, password } = req.body;
+    User.findOne({ username, password })
+        .then(() => {
+            res.send("logged in successfully")
+        })
+        .catch(() => {
+            res.status(400)
+            res.send("user does not exist")
+        })
+})

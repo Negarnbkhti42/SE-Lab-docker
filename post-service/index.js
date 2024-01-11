@@ -1,5 +1,5 @@
-import express from 'express';
-import bodyParser from 'body-parser';
+const express = require('express');
+// impbodyParser from 'body-parser';
 
 const PORT = process.env.PORT || 3002;
 
@@ -9,10 +9,9 @@ const dbPort = process.env.DB_PORT;
 
 const app = express();
 
-await mongoose.connect(`mongodb://${dbUsername}:${dbPassword}@mongo:${dbPort}`);
 
 app.get('/', (req, res) => {
-    res.send('Hello World!');
+    res.send('this is the post service');
 });
 
 app.listen(PORT, () => {
