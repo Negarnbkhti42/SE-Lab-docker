@@ -1,5 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
 const User = require('./models/User');
 
 const PORT = process.env.PORT || 3001;
@@ -9,6 +10,9 @@ const dbPassword = process.env.DB_PASSWORD
 const dbPort = process.env.DB_PORT;
 
 const app = express();
+
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 mongoose.connect(`mongodb://${dbUsername}:${dbPassword}@mongo:${dbPort}`, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => console.log('MongoDB connected'))
@@ -22,7 +26,7 @@ app.get('/', (req, res) => {
     res.send('this is the user serivce');
 });
 
-app.post('/signup', async (req, res) => {
+app.post('/signup', (req, res) => {
     const { username, password } = req.body;
     const newUser = new User({ username, password });
     newUser.save()
@@ -34,7 +38,8 @@ app.post('/signup', async (req, res) => {
         })
 })
 
-app.get('/login', async (req, res) => {
+app.post('/login', (req, res) => {
+    console.log("request:", req);
     const { username, password } = req.body;
     User.findOne({ username, password })
         .then(() => {

@@ -1,5 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
 const Post = require('./models/Post');
 const Comment = require('./models/Comment');
 
@@ -10,6 +11,9 @@ const dbPassword = process.env.DB_PASSWORD
 const dbPort = process.env.DB_PORT;
 
 const app = express();
+
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 mongoose.connect(`mongodb://${dbUsername}:${dbPassword}@mongo:${dbPort}`, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => console.log('MongoDB connected'))
