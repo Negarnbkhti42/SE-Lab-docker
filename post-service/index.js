@@ -32,7 +32,7 @@ app.post('/publish', (req, res) => {
     const newPost = new Post({ writer: userId, title, content });
     newPost.save()
         .then(() => {
-            res.send(newPost._id);
+            res.send(newPost.toObject());
         })
         .catch(() => {
             res.status(400);
@@ -45,5 +45,43 @@ app.get('/posts', (req, res) => {
         .then((posts) => {
             res.setHeader('Content-Type', 'application/json');
             res.end(JSON.stringify(posts));
+        })
+})
+
+app.get('/post/:postId', (req, res) => {
+    Post.fingOne({ _id: req.params.postId })
+        .then((post) => {
+            res.setHeader('Content-Type', 'application/json');
+            res.end(JSON.stringify(post));
+        })
+        .catch(() => {
+            res.status(400)
+                .send("Couldn't find post");
+        })
+})
+
+app.post('/comment', (req, res) => {
+    const { userId, postId, text } = req.body;
+    const newComment = new Comment({ writer: userId, post: postId, text });
+    newComment.save()
+        .then(() => {
+            res.setHeader('Content-Type', 'application/json');
+            res.end(JSON.stringify(newComment.toObject()));
+        })
+        .catch(() => {
+            res.status(400)
+                .send("Couldn't submit comment")
+        })
+})
+
+app.get('/comments/:postId', (req, res) => {
+    Comment.find({ post: req.params.postId })
+        .then((comments) => {
+            res.setHeader('Content-Type', 'application/json');
+            res.end(JSON.stringify(comments));
+        })
+        .catch(() => {
+            res.status(400)
+                .send("Couldn't find comments for post");
         })
 })

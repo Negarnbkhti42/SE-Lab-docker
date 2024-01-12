@@ -31,7 +31,7 @@ app.post('/signup', (req, res) => {
     const newUser = new User({ username, password });
     newUser.save()
         .then(() => {
-            res.send(newUser.toObject());
+            res.send(newUser.toObject()._id);
         }).catch(() => {
             res.status(400);
             res.send("failed to create user");
@@ -42,8 +42,8 @@ app.post('/login', (req, res) => {
     console.log("request:", req);
     const { username, password } = req.body;
     User.findOne({ username, password })
-        .then(() => {
-            res.send("logged in successfully")
+        .then((user) => {
+            res.send(user._id)
         })
         .catch(() => {
             res.status(400)
