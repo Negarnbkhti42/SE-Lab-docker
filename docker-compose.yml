@@ -47,5 +47,20 @@ services:
       - DB_PORT=27017
     stdin_open: true
     tty: true
+  comment-service:
+    depends_on:
+      - mongo
+    build:
+      context: ./comment-service
+    restart: unless-stopped
+    ports:
+      - 8083:8083
+    environment:
+      - DB_USER=root
+      - DB_PASSWORD=example
+      - DB_NAME=microservice_db
+      - DB_PORT=27017
+    stdin_open: true
+    tty: true
 volumes:
   db:
