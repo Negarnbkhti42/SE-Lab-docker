@@ -49,7 +49,7 @@ app.get('/posts', (req, res) => {
 })
 
 app.get('/post/:postId', (req, res) => {
-    Post.fingOne({ _id: req.params.postId })
+    Post.findOne({ _id: req.params.postId })
         .then((post) => {
             res.setHeader('Content-Type', 'application/json');
             res.end(JSON.stringify(post));
